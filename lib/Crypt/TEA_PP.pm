@@ -109,7 +109,7 @@ sub encrypt {
     return pack( 'L>*', @{$cipher_text_ref} );
 }
 
-=method
+=method decrypt
 
     $plain_text = $tea->decrypt($cipher_text);
 Decrypts blocksize() bytes of $data and returns the corresponding plaintext.
