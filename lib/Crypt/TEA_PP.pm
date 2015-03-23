@@ -180,9 +180,9 @@ sub key_setup {
 
 =head1 SEE ALSO
 
-=for :list
-* L<http://www.vader.brad.ac.uk/tea/tea.shtml>
-* L<Crypt::CBC>
+L<http://www.vader.brad.ac.uk/tea/tea.shtml>
+
+L<Crypt::CBC>
 
 =cut
 
