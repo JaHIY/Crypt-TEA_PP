@@ -106,9 +106,9 @@ sub encrypt {
     my $self = shift;
     my $plain_text = shift;
     croak( sprintf( 'block size must be %d', $BLOCK_SIZE) ) if length($plain_text) != $BLOCK_SIZE;
-    my @block = unpack 'I>*', $plain_text;
+    my @block = unpack 'N*', $plain_text;
     my $cipher_text_ref = $self->encrypt_block( \@block );
-    return pack( 'I>*', @{$cipher_text_ref} );
+    return pack( 'N*', @{$cipher_text_ref} );
 }
 
 =method decrypt
@@ -123,9 +123,9 @@ sub decrypt {
     my $self = shift;
     my $cipher_text = shift;
     croak( sprintf( 'block size must be %d', $BLOCK_SIZE) ) if length($cipher_text) != $BLOCK_SIZE;
-    my @block = unpack 'I>*', $cipher_text;
+    my @block = unpack 'N*', $cipher_text;
     my $plain_text_ref = $self->decrypt_block( \@block );
-    return pack( 'I>*', @{$plain_text_ref} );
+    return pack( 'N*', @{$plain_text_ref} );
 }
 
 sub encrypt_block {
@@ -177,7 +177,7 @@ sub key_setup {
     my $key_str = shift;
     croak( sprintf( 'key must be %s bytes long', $KEY_SIZE ) ) if length( $key_str ) != $KEY_SIZE;
     my @key_arr = split '', $key_str;
-    my @tea_key = map { unpack( 'I>*', join('', @{$_}) ) } map { [ map { $key_arr[$_] } @{$_} ] } part { int( $_ / 4 ) } keys @key_arr;
+    my @tea_key = map { unpack( 'N*', join('', @{$_}) ) } map { [ map { $key_arr[$_] } @{$_} ] } part { int( $_ / 4 ) } keys @key_arr;
     return \@tea_key;
 }
 
