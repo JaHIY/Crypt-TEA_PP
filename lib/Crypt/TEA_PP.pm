@@ -32,7 +32,7 @@ $VERSION = '0.01';
 TEA is a 64-bit symmetric block cipher with a 128-bit key and a variable number of rounds (32 is recommended).
 It has a low setup time, and depends on a large number of rounds for security, rather than a complex algorithm.
 It was developed by David J. Wheeler and Roger M. Needham,
-and is described at <http://www.ftp.cl.cam.ac.uk/ftp/papers/djw-rmn/djw-rmn-tea.html>
+and is described at L<http://www.ftp.cl.cam.ac.uk/ftp/papers/djw-rmn/djw-rmn-tea.html>
 
 This module implements TEA encryption. It supports the Crypt::CBC interface, with the following functions.
 
@@ -98,7 +98,7 @@ sub new {
 
     $cipher_text = $tea->encrypt($plain_text);
 
-Encrypts blocksize() bytes of $data and returns the corresponding ciphertext.
+Encrypts blocksize() bytes of $plain_text and returns the corresponding ciphertext.
 
 =cut
 
@@ -115,7 +115,7 @@ sub encrypt {
 
     $plain_text = $tea->decrypt($cipher_text);
 
-Decrypts blocksize() bytes of $data and returns the corresponding plaintext.
+Decrypts blocksize() bytes of $cipher_text and returns the corresponding plaintext.
 
 =cut
 
