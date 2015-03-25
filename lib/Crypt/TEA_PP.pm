@@ -176,8 +176,8 @@ sub decrypt_block {
 sub key_setup {
     my $key_str = shift;
     croak( sprintf( 'key must be %s bytes long', $KEY_SIZE ) ) if length( $key_str ) != $KEY_SIZE;
-    my @key_arr = split '', $key_str;
-    my @tea_key = map { unpack( 'N*', join('', @{$_}) ) } map { [ map { $key_arr[$_] } @{$_} ] } part { int( $_ / 4 ) } keys @key_arr;
+    my @key_arr = $key_str =~ /.{4}/g;
+    my @tea_key = map { unpack 'N*' } @key_arr;
     return \@tea_key;
 }
 
