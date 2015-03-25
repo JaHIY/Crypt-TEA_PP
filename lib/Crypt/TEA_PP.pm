@@ -8,7 +8,7 @@ use utf8;
 use integer;
 
 use Carp;
-use List::MoreUtils qw(all part);
+use List::Util qw(all);
 
 use vars qw ($VERSION);
 
