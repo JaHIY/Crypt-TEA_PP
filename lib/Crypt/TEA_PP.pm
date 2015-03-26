@@ -140,7 +140,6 @@ sub encrypt_block {
     my @key = map { $_ & 0xffff_ffff } @{ $key_ref };
     my $sumation = 0 & 0xffff_ffff;
     my $delta = $DELTA & 0xffff_ffff;
-        printf("\t--> block[0] = %d, block[1] = %d\n", $block[0], $block[1]);
     for my $i ( 0 .. $self->{rounds}-1 ) {
         $sumation = ( $sumation + $delta ) & 0xffff_ffff;
         $block[0] = ( $block[0] + ( ( ( ( ( ( ( ( $block[1] << 4 ) & 0xffff_ffff ) + $key[0] ) & 0xffff_ffff ) ^ ( ( $block[1] + $sumation ) & 0xffff_ffff ) ) & 0xffff_ffff ) ^ ( ( ( ( $block[1] >> 5 ) & 0xffff_ffff ) +  $key[1] ) & 0xffff_ffff ) ) & 0xffff_ffff ) ) & 0xffff_ffff;
