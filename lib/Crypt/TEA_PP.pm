@@ -5,14 +5,14 @@ package Crypt::TEA_PP;
 use strict;
 use warnings;
 use utf8;
-use integer;
+use bigint;
 
 use Carp;
 use List::Util qw(all);
 
 use vars qw ($VERSION);
 
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 =head1 SYNOPSIS
 
