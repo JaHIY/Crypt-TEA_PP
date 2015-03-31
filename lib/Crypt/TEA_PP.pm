@@ -5,7 +5,6 @@ package Crypt::TEA_PP;
 use strict;
 use warnings;
 use utf8;
-use bigint;
 
 use Carp;
 use List::Util qw(all);
@@ -13,6 +12,14 @@ use List::Util qw(all);
 use vars qw ($VERSION);
 
 $VERSION = '0.03';
+
+use Config;
+BEGIN {
+    if ( not defined $Config{use64bitint} ) {
+        require bigint;
+        bigint->import;
+    }
+}
 
 =head1 SYNOPSIS
 
