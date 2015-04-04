@@ -5,6 +5,7 @@ package Crypt::TEA_PP;
 use strict;
 use warnings;
 use utf8;
+use integer;
 
 use Carp;
 use List::Util qw(all);
