@@ -30,7 +30,7 @@ BEGIN {
    my $tea = Crypt::TEA_PP->new( $key );
    my $cbc = Crypt::CBC->new( -cipher => $tea );
 
-   my $text = 'The quick brown fox jumps over the lazy dog';
+   my $text = 'The quick brown fox jumps over the lazy dog.';
    my $cipher_text = $cbc->encrypt( $text );
 
    my $plain_text = $cbc->decrypt( $cipher_text );
@@ -72,7 +72,7 @@ use constant blocksize => $BLOCK_SIZE;
 
 =method new
 
-    my $tea =  Crypt::TEA_PP->new( $key, $rounds );
+    my $tea = Crypt::TEA_PP->new( $key, $rounds );
 
 This creates a new Crypt::TEA_PP object with the specified key.
 The optional rounds parameter specifies the number of rounds of encryption to perform, and defaults to 32.
