@@ -93,7 +93,7 @@ sub new {
         croak( sprintf( 'key must be a %d-byte-long STRING or a reference of ARRAY', $KEY_SIZE ) ) if length $key != $KEY_SIZE;
         $tea_key = key_setup($key);
     }
-    croak( 'rounds must be a positive NUMBER' ) if isint( $rounds ) != 0 and $rounds > 0;
+    croak( 'rounds must be a positive NUMBER' ) if isint( $rounds ) != 1;
     my $self = {
         key => $tea_key,
         rounds => $rounds,
