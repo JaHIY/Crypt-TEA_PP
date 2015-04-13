@@ -9,6 +9,7 @@ use integer;
 
 use Carp;
 use List::Util qw(all);
+use Scalar::Util::Numeric qw(isint);
 
 # VERSION
 
@@ -86,13 +87,13 @@ sub new {
     if ( my $ref_of_key = ref( $key ) ) {
         croak( sprintf( 'key must be a %d-byte-long STRING or a reference of ARRAY', $KEY_SIZE ) ) if not $ref_of_key eq 'ARRAY';
         croak( sprintf( 'key must has %d elements if key is a reference of ARRAY', $ELEMENTS_IN_KEY ) ) if scalar( @{ $key } ) != $ELEMENTS_IN_KEY;
-        croak( 'each element of key must be a NUMBER if key is a reference of ARRAY' ) if not all { /^-?\d+$/ } @{ $key };
+        croak( 'each element of key must be a 32bit Integer if key is a reference of ARRAY' ) if not all { isint( $_ ) != 0 } @{ $key };
         $tea_key = $key;
     } else {
         croak( sprintf( 'key must be a %d-byte-long STRING or a reference of ARRAY', $KEY_SIZE ) ) if length $key != $KEY_SIZE;
         $tea_key = key_setup($key);
     }
-    croak( 'rounds must be a positive NUMBER' ) if $rounds !~ /^\d+$/;
+    croak( 'rounds must be a positive NUMBER' ) if isint( $rounds ) != 0 and $rounds > 0;
     my $self = {
         key => $tea_key,
         rounds => $rounds,
@@ -111,7 +112,7 @@ Encrypts blocksize() bytes of $plain_text and returns the corresponding cipherte
 sub encrypt {
     my $self = shift;
     my $plain_text = shift;
-    croak( sprintf( 'block size must be %d', $BLOCK_SIZE) ) if length($plain_text) != $BLOCK_SIZE;
+    croak( sprintf( 'plain_text size must be %d bytes', $BLOCK_SIZE) ) if length($plain_text) != $BLOCK_SIZE;
     my @block = unpack 'N*', $plain_text;
     my $cipher_text_ref = $self->encrypt_block( \@block );
     return pack( 'N*', @{$cipher_text_ref} );
@@ -128,7 +129,7 @@ Decrypts blocksize() bytes of $cipher_text and returns the corresponding plainte
 sub decrypt {
     my $self = shift;
     my $cipher_text = shift;
-    croak( sprintf( 'block size must be %d', $BLOCK_SIZE) ) if length($cipher_text) != $BLOCK_SIZE;
+    croak( sprintf( 'cipher_text size must be %d bytes', $BLOCK_SIZE) ) if length($cipher_text) != $BLOCK_SIZE;
     my @block = unpack 'N*', $cipher_text;
     my $plain_text_ref = $self->decrypt_block( \@block );
     return pack( 'N*', @{$plain_text_ref} );
