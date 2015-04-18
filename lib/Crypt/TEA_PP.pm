@@ -83,17 +83,27 @@ sub new {
     my $key = shift;
     my $rounds = shift // $ROUNDS;
     my $tea_key;
+
     croak( 'key is required' ) if not defined $key;
+
     if ( my $ref_of_key = ref( $key ) ) {
+
         croak( sprintf( 'key must be a %d-byte-long STRING or a reference of ARRAY', $KEY_SIZE ) ) if not $ref_of_key eq 'ARRAY';
         croak( sprintf( 'key must has %d elements if key is a reference of ARRAY', $ELEMENTS_IN_KEY ) ) if scalar( @{ $key } ) != $ELEMENTS_IN_KEY;
         croak( 'each element of key must be a 32bit Integer if key is a reference of ARRAY' ) if not all { isint( $_ ) != 0 } @{ $key };
+
         $tea_key = $key;
+
     } else {
+
         croak( sprintf( 'key must be a %d-byte-long STRING or a reference of ARRAY', $KEY_SIZE ) ) if length $key != $KEY_SIZE;
+
         $tea_key = key_setup($key);
+
     }
+
     croak( 'rounds must be a positive NUMBER' ) if isint( $rounds ) != 1;
+
     my $self = {
         key => $tea_key,
         rounds => $rounds,
@@ -151,8 +161,6 @@ sub encrypt_block {
         $sumation = ( $sumation + $delta ) & 0xffff_ffff;
         $block[0] = ( $block[0] + ( ( ( ( ( ( ( ( $block[1] << 4 ) & 0xffff_ffff ) + $key[0] ) & 0xffff_ffff ) ^ ( ( $block[1] + $sumation ) & 0xffff_ffff ) ) & 0xffff_ffff ) ^ ( ( ( ( $block[1] >> 5 ) & 0xffff_ffff ) +  $key[1] ) & 0xffff_ffff ) ) & 0xffff_ffff ) ) & 0xffff_ffff;
         $block[1] = ( $block[1] + ( ( ( ( ( ( ( ( $block[0] << 4 ) & 0xffff_ffff ) + $key[2] ) & 0xffff_ffff ) ^ ( ( $block[0] + $sumation ) & 0xffff_ffff ) ) & 0xffff_ffff ) ^ ( ( ( ( $block[0] >> 5 ) & 0xffff_ffff ) +  $key[3] ) & 0xffff_ffff ) ) & 0xffff_ffff ) ) & 0xffff_ffff;
-        #printf("\t--> Encrypting block round %d of %d\n", $i + 1, $ROUNDS);
-        #printf("\t--> block[0] = %d, block[1] = %d\n", $block[0], $block[1]);
     }
     return \@block;
 }
@@ -173,8 +181,6 @@ sub decrypt_block {
         $block[1] = ( $block[1] - ( ( ( ( ( ( ( ( $block[0] << 4 ) & 0xffff_ffff ) + $key[2] ) & 0xffff_ffff ) ^ ( ( $block[0] + $sumation ) & 0xffff_ffff ) ) & 0xffff_ffff ) ^ ( ( ( ( $block[0] >> 5 ) & 0xffff_ffff ) + $key[3] ) & 0xffff_ffff ) ) & 0xffff_ffff ) ) & 0xffff_ffff;
         $block[0] = ( $block[0] - ( ( ( ( ( ( ( ( $block[1] << 4 ) & 0xffff_ffff ) + $key[0] ) & 0xffff_ffff ) ^ ( ( $block[1] + $sumation ) & 0xffff_ffff ) ) & 0xffff_ffff ) ^ ( ( ( ( $block[1] >> 5 ) & 0xffff_ffff ) + $key[1] ) & 0xffff_ffff ) ) & 0xffff_ffff ) ) & 0xffff_ffff;
         $sumation = ( $sumation - $delta ) & 0xffff_ffff;
-        #printf("\t--> Decrypting block round %d of %d\n", $i + 1, $ROUNDS);
-        #printf("\t--> block[0] = %d, block[1] = %d\n", $block[0], $block[1]);
     }
     return \@block;
 }
@@ -191,6 +197,8 @@ sub key_setup {
 L<http://www.vader.brad.ac.uk/tea/tea.shtml>
 
 L<Crypt::CBC>
+
+L<Crypt::TEA_XS>
 
 =cut
 
